@@ -16,8 +16,9 @@ var SettlementStatuses = []string{
 }
 
 // IsReconciliationFailed 判断状态是否计入对账失败数。
+// 冲正（reversed）与失败（failed）均代表当日未达成有效结算，统一计入对账失败数。
 func IsReconciliationFailed(status string) bool {
-	return status == SettlementFailed
+	return status == SettlementFailed || status == SettlementReversed
 }
 
 // UploadStatus 上传批次状态。

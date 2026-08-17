@@ -62,9 +62,10 @@ func (r *SettlementOrderRepository) List(clientID uint, status string, page, pag
 }
 
 // TodaySettled 当日已结算（对账，date 为 Asia/Shanghai 日期串）。
+// 使用 DATE() 取日期部分，兼容 SQLite 与 PostgreSQL（::date 仅 PostgreSQL 可用）。
 func (r *SettlementOrderRepository) TodaySettled(clientID uint, date string) ([]model.SettlementOrder, error) {
 	var orders []model.SettlementOrder
-	q := r.db.Where("settled_at::date = ?", date)
+	q := r.db.Where("DATE(settled_at) = ?", date)
 	if clientID > 0 {
 		q = q.Where("client_id = ?", clientID)
 	}
