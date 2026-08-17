@@ -5,7 +5,9 @@
 ```bash
 cd backend
 go build ./...     # 编译
+cd backend
 go run ./cmd/app   # 启动（如项目可运行）
+cd backend
 go test ./...      # 测试（如有）
 ```
 

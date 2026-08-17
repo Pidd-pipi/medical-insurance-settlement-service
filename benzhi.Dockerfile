@@ -1,4 +1,4 @@
-# 评测用镜像：从仓库根目录构建 backend 下的 Go 项目。
+# 评测用镜像：从仓库根目录构建子目录中的 Go 项目。
 FROM golang:1.22
 WORKDIR /app
 COPY backend/go.mod backend/go.sum ./backend/
