@@ -17,7 +17,7 @@ var SettlementStatuses = []string{
 
 // IsReconciliationFailed 判断状态是否计入对账失败数。
 func IsReconciliationFailed(status string) bool {
-	return status == SettlementFailed
+	return status == SettlementFailed || status == SettlementReversed
 }
 
 // UploadStatus 上传批次状态。
