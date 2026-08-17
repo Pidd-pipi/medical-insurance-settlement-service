@@ -100,6 +100,9 @@ func (s *ApiClientService) UpdateStatus(ctx context.Context, id uint, status str
 		}
 		return util.LogError(s.log, constants.LOG_CLIENT_STATUS_CHANGED, fmt.Errorf("find client: %w", err))
 	}
+	if !constants.IsValidClientStatus(status) {
+		return util.BadRequest("调用方状态（ApiClient.status）不合法", errors.New("invalid client status"))
+	}
 	if err := s.repo.UpdateStatus(client.ID, status); err != nil {
 		return util.LogError(s.log, constants.LOG_CLIENT_STATUS_CHANGED, fmt.Errorf("update status: %w", err))
 	}

@@ -1,5 +1,6 @@
 package util
 
+
 import (
 	"fmt"
 	"time"
@@ -65,4 +66,12 @@ func ClientTypeText(typ string) string {
 		return "医院信息系统"
 	}
 	return "第三方"
+}
+
+// ClientStatusText 调用方状态中文文案。
+func ClientStatusText(status string) string {
+	if status == "active" {
+		return "启用"
+	}
+	return "停用"
 }

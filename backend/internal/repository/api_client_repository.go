@@ -40,6 +40,15 @@ func (r *ApiClientRepository) List(page, pageSize int) ([]model.ApiClient, int64
 	return clients, total, err
 }
 
+// ExistsByID 判断调用方是否存在。
+func (r *ApiClientRepository) ExistsByID(id uint) (bool, error) {
+	var count int64
+	if err := r.db.Model(&model.ApiClient{}).Where("id = ?", id).Count(&count).Error; err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
 // Update 更新调用方。
 func (r *ApiClientRepository) Update(client *model.ApiClient) error { return r.db.Save(client).Error }
 

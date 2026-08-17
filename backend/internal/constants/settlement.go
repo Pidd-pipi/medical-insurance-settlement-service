@@ -23,6 +23,11 @@ const (
 	UploadFailed     = "failed"     // 校验失败
 )
 
+// IsValidClientStatus 校验调用方状态。
+func IsValidClientStatus(s string) bool {
+	return s == ClientActive || s == ClientDisabled
+}
+
 // ClientStatus 调用方状态。
 const (
 	ClientActive   = "active"
