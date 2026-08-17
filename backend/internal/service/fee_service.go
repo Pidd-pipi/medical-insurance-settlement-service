@@ -63,7 +63,7 @@ func (s *FeeService) Upload(ctx context.Context, input UploadInput) (*UploadResu
 		return nil, err
 	}
 	// 重复性检查：同一调用方/参保人当日已上传则标记 Duplicate
-	duplicate, err := s.batchRepo.ExistsByClientInsuredDate(input.ClientID, input.InsuredPersonID)
+	duplicate, err := s.batchRepo.ExistsByClientInsuredDate(input.ClientID, input.InsuredPersonID, util.StartOfToday())
 	if err != nil {
 		return nil, util.LogError(s.log, constants.LOG_FEE_UPLOAD_FAILED, fmt.Errorf("check duplicate batch: %w", err))
 	}

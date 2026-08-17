@@ -2,6 +2,8 @@ package repository
 
 import (
 	"errors"
+	"time"
+
 	"github.com/blueship581/gbinsureapi/internal/model"
 	"github.com/blueship581/gbinsureapi/internal/util"
 	"gorm.io/gorm"
@@ -57,11 +59,13 @@ func (r *UploadBatchRepository) UpdateStatus(id uint, status string) error {
 	return r.db.Model(&model.UploadBatch{}).Where("id = ?", id).Update("upload_status", status).Error
 }
 
-// ExistsByClientInsuredDate 检查同一调用方/参保人/日期是否已有批次（重复性检查）。
-func (r *UploadBatchRepository) ExistsByClientInsuredDate(clientID, insuredID uint) (bool, error) {
+// ExistsByClientInsuredDate 检查同一调用方/参保人当日是否已有批次（重复性检查）。
+// 当日以 since 作为左闭边界（created_at >= since），由调用方传入 Asia/Shanghai 今日 00:00，
+// 这样仅当日批次才视为重复，跨天批次不再误拦新上传。
+func (r *UploadBatchRepository) ExistsByClientInsuredDate(clientID, insuredID uint, since time.Time) (bool, error) {
 	var count int64
 	err := r.db.Model(&model.UploadBatch{}).
-		Where("client_id = ? AND insured_person_id = ?", clientID, insuredID).
+		Where("client_id = ? AND insured_person_id = ? AND created_at >= ?", clientID, insuredID, since).
 		Count(&count).Error
 	return count > 0, err
 }
