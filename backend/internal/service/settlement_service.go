@@ -42,6 +42,9 @@ func (s *SettlementService) CalculatePresettlement(ctx context.Context, batchID 
 	if err != nil {
 		return nil, err
 	}
+	if !constants.IsValidInsuranceType(person.InsuranceType) {
+		return nil, util.BadRequest("参保类型（InsuredPerson.insurance_type）不合法", errors.New("invalid insurance type"))
+	}
 	items, err := s.feeRepo.ListByBatch(batchID)
 	if err != nil {
 		return nil, util.LogError(s.log, constants.LOG_PRESETTLEMENT_FAILED, fmt.Errorf("list fee items: %w", err))

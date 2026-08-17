@@ -5,7 +5,7 @@ import "time"
 // Presettlement 预结算。
 type Presettlement struct {
 	ID                   uint      `gorm:"primaryKey" json:"id"`
-	BatchID              uint      `gorm:"index;not null" json:"batch_id"`
+	BatchID              uint      `gorm:"index:idx_preset_batch;not null" json:"batch_id"`
 	InsuredPersonID      uint      `gorm:"index;not null" json:"insured_person_id"`
 	TotalAmount          float64   `json:"total_amount"`
 	InsurancePayAmount   float64   `json:"insurance_pay_amount"`

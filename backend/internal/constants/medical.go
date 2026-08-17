@@ -20,6 +20,16 @@ const (
 // InsuranceTypes 全部医保类型。
 var InsuranceTypes = []string{InsuranceTypeEmployee, InsuranceTypeResident, InsuranceTypeNewRural}
 
+// IsValidInsuranceType 校验参保类型。
+func IsValidInsuranceType(t string) bool {
+	switch t {
+	case InsuranceTypeEmployee, InsuranceTypeResident, InsuranceTypeNewRural:
+		return true
+	default:
+		return false
+	}
+}
+
 // InsuranceStatus 参保状态。
 const (
 	InsuranceStatusActive    = "active"    // 在职
