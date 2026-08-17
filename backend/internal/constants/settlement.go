@@ -28,3 +28,6 @@ const (
 	ClientActive   = "active"
 	ClientDisabled = "disabled"
 )
+
+// ClientStatuses 全部调用方状态。
+var ClientStatuses = []string{ClientActive, ClientDisabled}

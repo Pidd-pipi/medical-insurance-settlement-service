@@ -14,6 +14,7 @@ const (
 	MsgReconciliationDone     = "日终对账完成"
 	MsgApiKeyInvalid          = "API Key（ApiClient.api_key_hash）校验失败"
 	MsgClientDisabled         = "调用方（ApiClient）已被停用"
+	MsgClientStatusInvalid    = "调用方（ApiClient.status）状态值不合法"
 	MsgTokenInvalid           = "JWT（ApiClient token）无效或已过期"
 	MsgInsuredNotFound        = "参保人（InsuredPerson）身份核验失败"
 	MsgBatchDuplicate         = "费用批次（UploadBatch）内容重复"

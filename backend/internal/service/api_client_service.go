@@ -93,6 +93,10 @@ func (s *ApiClientService) List(ctx context.Context, page, pageSize int) ([]mode
 
 // UpdateStatus 启用/停用调用方。
 func (s *ApiClientService) UpdateStatus(ctx context.Context, id uint, status string) error {
+	// 校验状态合法值，防止脏数据落库（service 层兜底，DTO binding 不可依赖）。
+	if !containsType(constants.ClientStatuses, status) {
+		return util.BadRequest(constants.MsgClientStatusInvalid, fmt.Errorf("invalid client status: %s", status))
+	}
 	client, err := s.repo.FindByID(id)
 	if err != nil {
 		if errors.Is(err, util.ErrNotFound) {
