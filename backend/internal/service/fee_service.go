@@ -58,6 +58,9 @@ type UploadResult struct {
 
 // Upload 上传费用明细：格式校验 → 重复检查 → 生成批次号。
 func (s *FeeService) Upload(ctx context.Context, input UploadInput) (*UploadResult, error) {
+	if input.ClientID == 0 {
+		return nil, util.BadRequest(constants.MsgClientIDRequired, errors.New("client_id required"))
+	}
 	s.log.InfoContext(ctx, constants.LOG_FEE_UPLOAD_START, "client_id", input.ClientID, "items", len(input.Items))
 	if _, err := s.insurance.GetByID(ctx, input.InsuredPersonID); err != nil {
 		return nil, err

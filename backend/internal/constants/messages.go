@@ -16,6 +16,7 @@ const (
 	MsgClientDisabled         = "调用方（ApiClient）已被停用"
 	MsgTokenInvalid           = "JWT（ApiClient token）无效或已过期"
 	MsgInsuredNotFound        = "参保人（InsuredPerson）身份核验失败"
+	MsgClientIDRequired = "调用方（client_id）不能为空"
 	MsgBatchDuplicate         = "费用批次（UploadBatch）内容重复"
 	MsgBatchInvalid           = "费用明细（FeeItem）格式校验失败"
 	MsgPresettleNotFound      = "预结算记录（Presettlement）不存在"

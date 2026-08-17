@@ -2,6 +2,8 @@ package repository
 
 import (
 	"errors"
+	"time"
+
 	"github.com/blueship581/gbinsureapi/internal/model"
 	"github.com/blueship581/gbinsureapi/internal/util"
 	"gorm.io/gorm"
@@ -59,9 +61,10 @@ func (r *UploadBatchRepository) UpdateStatus(id uint, status string) error {
 
 // ExistsByClientInsuredDate 检查同一调用方/参保人/日期是否已有批次（重复性检查）。
 func (r *UploadBatchRepository) ExistsByClientInsuredDate(clientID, insuredID uint) (bool, error) {
+	start, end := util.TodayRange(time.Now())
 	var count int64
 	err := r.db.Model(&model.UploadBatch{}).
-		Where("client_id = ? AND insured_person_id = ?", clientID, insuredID).
+		Where("client_id = ? AND insured_person_id = ? AND created_at >= ? AND created_at < ?", clientID, insuredID, start, end).
 		Count(&count).Error
 	return count > 0, err
 }
