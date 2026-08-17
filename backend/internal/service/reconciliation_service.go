@@ -40,10 +40,11 @@ func (s *ReconciliationService) Daily(ctx context.Context, clientID uint) (*mode
 		switch o.Status {
 		case constants.SettlementSettled:
 			success++
-		case constants.SettlementFailed:
-			fail++
 		case constants.SettlementPendingManual:
 			abnormal++
+		}
+		if constants.IsReconciliationFailed(o.Status) {
+			fail++
 		}
 	}
 	rec := &model.DailyReconciliation{

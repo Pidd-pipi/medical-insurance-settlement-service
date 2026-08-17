@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"errors"
-
 	"github.com/blueship581/gbinsureapi/internal/model"
 	"github.com/blueship581/gbinsureapi/internal/util"
 	"gorm.io/gorm"
@@ -25,10 +23,7 @@ func (r *DailyReconciliationRepository) Create(rec *model.DailyReconciliation) e
 func (r *DailyReconciliationRepository) FindByDate(date string) (*model.DailyReconciliation, error) {
 	var rec model.DailyReconciliation
 	if err := r.db.Where("reconcile_date = ?", date).First(&rec).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, util.ErrNotFound
-		}
-		return nil, err
+		return nil, util.ErrNotFound
 	}
 	return &rec, nil
 }

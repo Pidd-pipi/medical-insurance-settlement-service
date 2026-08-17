@@ -15,6 +15,11 @@ var SettlementStatuses = []string{
 	SettlementFailed, SettlementPendingManual,
 }
 
+// IsReconciliationFailed 判断状态是否计入对账失败数。
+func IsReconciliationFailed(status string) bool {
+	return status == SettlementFailed
+}
+
 // UploadStatus 上传批次状态。
 const (
 	UploadValidating = "validating" // 校验中
