@@ -28,7 +28,7 @@ func (c *SettlementCalculator) GetPolicy(insuranceType string) Policy {
 	case constants.InsuranceTypeResident:
 		return Policy{Deductible: 300, ReimbursementRate: 0.7, ClassBRatio: 0.9, PersonalCap: 1000}
 	case constants.InsuranceTypeNewRural:
-		return Policy{Deductible: 300, ReimbursementRate: 0.65, ClassBRatio: 0.9, PersonalCap: 800}
+		return Policy{Deductible: 200, ReimbursementRate: 0.65, ClassBRatio: 0.9, PersonalCap: 800}
 	default:
 		return Policy{Deductible: 500, ReimbursementRate: 0.7, ClassBRatio: 0.9, PersonalCap: 1000}
 	}
