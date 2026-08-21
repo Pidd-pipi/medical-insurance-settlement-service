@@ -66,3 +66,10 @@ func (r *FeeItemRepository) SumAmountByBatch(batchID uint) (float64, int64, erro
 		}{Total: total, Count: count}).Error
 	return total, count, err
 }
+
+// ListAll 查询全部费用明细（统计用）。
+func (r *FeeItemRepository) ListAll() ([]model.FeeItem, error) {
+	var items []model.FeeItem
+	err := r.db.Order("id asc").Find(&items).Error
+	return items, err
+}
