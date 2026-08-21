@@ -32,13 +32,15 @@ func (rl *RateLimiter) allow(clientID uint, qps int) bool {
 		qps = 10
 	}
 	rl.mu.Lock()
-	defer rl.mu.Unlock()
 	now := time.Now()
 	b, ok := rl.buckets[clientID]
 	if !ok {
 		rl.buckets[clientID] = &bucket{tokens: float64(qps), last: now}
+		rl.mu.Unlock()
 		return true
 	}
+	rl.mu.Unlock()
+
 	elapsed := now.Sub(b.last).Seconds()
 	b.tokens += elapsed * float64(qps)
 	if b.tokens > float64(qps) {
