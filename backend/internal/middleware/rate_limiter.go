@@ -32,15 +32,16 @@ func (rl *RateLimiter) allow(clientID uint, qps int) bool {
 		qps = 10
 	}
 	rl.mu.Lock()
+	defer rl.mu.Unlock()
 	now := time.Now()
 	b, ok := rl.buckets[clientID]
 	if !ok {
 		rl.buckets[clientID] = &bucket{tokens: float64(qps), last: now}
-		rl.mu.Unlock()
 		return true
 	}
-	rl.mu.Unlock()
 
+	// 令牌桶的“补充-判定-扣减”必须全程持锁，否则并发调用会在扣减前读到同一份
+	// 旧的 tokens，全部判定为通过，导致实际放行远超 qps（该拦的没拦住）。
 	elapsed := now.Sub(b.last).Seconds()
 	b.tokens += elapsed * float64(qps)
 	if b.tokens > float64(qps) {
