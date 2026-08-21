@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"strconv"
 
+	"github.com/blueship581/gbinsureapi/internal/constants"
 	"github.com/blueship581/gbinsureapi/internal/dto"
 	"github.com/blueship581/gbinsureapi/internal/service"
 	"github.com/blueship581/gbinsureapi/internal/util"
@@ -40,7 +41,7 @@ func (h *InsuredPersonHandler) Verify(c *gin.Context) {
 	}
 	person, err := h.svc.Verify(c.Request.Context(), req.IDCardNo, req.MedicalCardNo)
 	if err != nil {
-		c.Error(err)
+		c.Error(util.InternalError(constants.MsgInternalError, err))
 		return
 	}
 	util.OK(c, gin.H{

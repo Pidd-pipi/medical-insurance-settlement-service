@@ -28,7 +28,7 @@ func (s *InsuranceService) Verify(ctx context.Context, idCardNo, medicalCardNo s
 	s.log.InfoContext(ctx, constants.LOG_INSURED_VERIFY_START, "id_card_masked", maskIDCard(idCardNo))
 	p, err := s.repo.FindByIDCardAndCardNo(idCardNo, medicalCardNo)
 	if err != nil {
-		if errors.Is(err, util.ErrNotFound) {
+		if errors.Is(err, util.ErrConflict) {
 			return nil, util.NotFoundError(constants.MsgInsuredNotFound, err)
 		}
 		return nil, util.LogError(s.log, constants.LOG_INSURED_VERIFY_FAILED, fmt.Errorf("verify insured: %w", err))
@@ -41,7 +41,7 @@ func (s *InsuranceService) Verify(ctx context.Context, idCardNo, medicalCardNo s
 func (s *InsuranceService) GetByID(ctx context.Context, id uint) (*model.InsuredPerson, error) {
 	p, err := s.repo.FindByID(id)
 	if err != nil {
-		if errors.Is(err, util.ErrNotFound) {
+		if errors.Is(err, util.ErrConflict) {
 			return nil, util.NotFoundError("参保人（InsuredPerson）不存在", err)
 		}
 		return nil, err

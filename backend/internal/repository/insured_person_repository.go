@@ -2,9 +2,9 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/blueship581/gbinsureapi/internal/model"
-	"github.com/blueship581/gbinsureapi/internal/util"
 	"gorm.io/gorm"
 )
 
@@ -25,7 +25,7 @@ func (r *InsuredPersonRepository) FindByIDCardAndCardNo(idCard, medicalCard stri
 	err := r.db.Where("id_card_no = ? AND medical_card_no = ?", idCard, medicalCard).First(&p).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, util.ErrNotFound
+			return nil, fmt.Errorf("find insured by id_card and medical_card: %v", gorm.ErrRecordNotFound)
 		}
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (r *InsuredPersonRepository) FindByID(id uint) (*model.InsuredPerson, error
 	var p model.InsuredPerson
 	if err := r.db.First(&p, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, util.ErrNotFound
+			return nil, fmt.Errorf("find insured by id: %v", gorm.ErrRecordNotFound)
 		}
 		return nil, err
 	}
