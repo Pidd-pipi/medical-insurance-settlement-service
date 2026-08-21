@@ -6,19 +6,20 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME:-gbinsureapi}-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-gbinsureapi_db}
+      POSTGRES_USER: ${DB_USER:-gbinsureapi_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-gbinsureapi_pwd}
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - "${DB_PORT:-5434}:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-gbinsureapi_user} -d ${DB_NAME:-gbinsureapi_db}"]
       interval: 5s
       timeout: 5s
       retries: 20
+      start_period: 10s
 
   backend:
     build:
@@ -32,11 +33,11 @@ services:
       PORT: 8080
       DB_HOST: db
       DB_PORT: 5432
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      API_KEY_SECRET: ${API_KEY_SECRET}
+      DB_NAME: ${DB_NAME:-gbinsureapi_db}
+      DB_USER: ${DB_USER:-gbinsureapi_user}
+      DB_PASSWORD: ${DB_PASSWORD:-gbinsureapi_pwd}
+      JWT_SECRET: ${JWT_SECRET:-change_me_to_a_long_random_string}
+      API_KEY_SECRET: ${API_KEY_SECRET:-change_me_to_a_long_random_string}
     ports:
       - "${BACKEND_PORT:-19935}:8080"
     depends_on:
@@ -47,6 +48,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 20
+      start_period: 10s
 
 volumes:
   db_data:

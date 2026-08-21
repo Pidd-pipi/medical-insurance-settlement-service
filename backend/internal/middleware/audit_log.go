@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"log/slog"
 	"time"
 
@@ -16,6 +17,7 @@ func AuditLog(repo *repository.AuditLogRepository, log *slog.Logger) gin.Handler
 	return func(c *gin.Context) {
 		start := time.Now()
 		c.Next()
+		ctx := context.Background()
 		clientID := uint(0)
 		if v, ok := c.Get(ClientIDKey); ok {
 			if id, ok := v.(uint); ok {
@@ -26,7 +28,7 @@ func AuditLog(repo *repository.AuditLogRepository, log *slog.Logger) gin.Handler
 			ClientID: clientID, Method: c.Request.Method, Path: c.Request.URL.Path,
 			StatusCode: c.Writer.Status(), LatencyMs: time.Since(start).Milliseconds(),
 		}
-		if err := repo.Create(entry); err != nil {
+		if err := repo.Create(ctx, entry); err != nil {
 			util.LogError(log, constants.LOG_AUDIT_WRITTEN, err, "client_id", clientID)
 		}
 	}

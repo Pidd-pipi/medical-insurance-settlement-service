@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"context"
+
 	"github.com/blueship581/gbinsureapi/internal/model"
 	"gorm.io/gorm"
 )
@@ -12,7 +14,17 @@ type AuditLogRepository struct{ db *gorm.DB }
 func NewAuditLogRepository(db *gorm.DB) *AuditLogRepository { return &AuditLogRepository{db: db} }
 
 // Create 写入审计日志。
-func (r *AuditLogRepository) Create(log *model.AuditLog) error { return r.db.Create(log).Error }
+func (r *AuditLogRepository) Create(ctx context.Context, log *model.AuditLog) error {
+	return r.db.Create(log).Error
+}
+
+// BatchCreate 批量写入审计日志。
+func (r *AuditLogRepository) BatchCreate(ctx context.Context, logs []model.AuditLog) error {
+	if len(logs) == 0 {
+		return nil
+	}
+	return r.db.Create(&logs).Error
+}
 
 // ListByClient 按调用方查询审计日志。
 func (r *AuditLogRepository) ListByClient(clientID uint, page, pageSize int) ([]model.AuditLog, int64, error) {
